@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: kbo-batch
+  profiles:
+    active: local
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    database: postgresql
