@@ -8,3 +8,6 @@ spring:
       ddl-auto: update
     show-sql: true
     database: postgresql
+
+scrap:
+  ranking: https://www.koreabaseball.com/Record/TeamRank/TeamRankDaily.aspx
