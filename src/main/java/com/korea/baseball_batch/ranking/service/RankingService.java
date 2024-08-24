@@ -1,7 +1,7 @@
-package com.korea.baseball_batch.Ranking.service;
+package com.korea.baseball_batch.ranking.service;
 
 import com.korea.baseball_batch.common.entity.Team;
-import com.korea.baseball_batch.Ranking.repository.RankingRepository;
+import com.korea.baseball_batch.ranking.repository.RankingRepository;
 import com.korea.baseball_batch.common.enums.Teams;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

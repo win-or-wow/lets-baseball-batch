@@ -1,6 +1,6 @@
-package com.korea.baseball_batch.Ranking.scrap;
+package com.korea.baseball_batch.ranking.scrap;
 
-import com.korea.baseball_batch.Ranking.service.RankingService;
+import com.korea.baseball_batch.ranking.service.RankingService;
 import com.korea.baseball_batch.config.ScrapingConfig;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
