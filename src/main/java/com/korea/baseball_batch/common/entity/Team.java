@@ -1,4 +1,4 @@
-package com.korea.baseball_batch.Ranking.entity;
+package com.korea.baseball_batch.common.entity;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Entity;

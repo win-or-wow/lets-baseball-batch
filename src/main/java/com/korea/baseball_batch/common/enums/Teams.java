@@ -1,4 +1,4 @@
-package com.korea.baseball_batch.Ranking.enums;
+package com.korea.baseball_batch.common.enums;
 
 import lombok.Getter;
 
