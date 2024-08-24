@@ -1,8 +1,8 @@
 package com.korea.baseball_batch.Ranking.service;
 
-import com.korea.baseball_batch.Ranking.entity.Team;
-import com.korea.baseball_batch.Ranking.enums.Teams;
+import com.korea.baseball_batch.common.entity.Team;
 import com.korea.baseball_batch.Ranking.repository.RankingRepository;
+import com.korea.baseball_batch.common.enums.Teams;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
 package com.korea.baseball_batch.Ranking.repository;
 
-import com.korea.baseball_batch.Ranking.entity.Team;
+import com.korea.baseball_batch.common.entity.Team;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
