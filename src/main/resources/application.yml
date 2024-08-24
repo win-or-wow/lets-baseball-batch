@@ -11,3 +11,7 @@ spring:
 
 scrap:
   ranking: https://www.koreabaseball.com/Record/TeamRank/TeamRankDaily.aspx
+
+# 스크래핑을 위한 web-driver 위치 설정
+path:
+  web-driver: driver/chromedriver.exe
