@@ -25,7 +25,7 @@ public class RankingScrap {
 
     @Scheduled(fixedDelay = 10000) // 10초마다 실행
     public void getInfo() {
-        Document document = scrapingConfig.request(rankingUrl);
+        Document document = scrapingConfig.requestJsoup(rankingUrl);
 
         // th에서 '순위'를 찾은 후 해당 컬럼 index를 return: first
         Element table = document.select("#cphContents_cphContents_cphContents_udpRecord table").get(0);
