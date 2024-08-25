@@ -8,3 +8,12 @@ spring:
       ddl-auto: update
     show-sql: true
     database: postgresql
+
+scrap:
+  ranking: https://www.koreabaseball.com/Record/TeamRank/TeamRankDaily.aspx
+  play: https://m.sports.naver.com/kbaseball/schedule/index?category=kbo&date=2024-08-01
+  score: https://m.sports.naver.com/kbaseball/schedule/index?date=2024-08-24
+
+# 스크래핑을 위한 web-driver 위치 설정
+path:
+  web-driver: driver/chromedriver.exe
