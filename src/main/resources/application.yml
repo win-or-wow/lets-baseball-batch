@@ -2,12 +2,18 @@ spring:
   application:
     name: kbo-batch
   profiles:
-    active: local
+    active: prod
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
     database: postgresql
+  batch:
+    job:
+      enabled: true
+      name: ${job.name:syncRankingJob}
+    jdbc:
+      initialize-schema: always
 
 scrap:
   ranking: https://www.koreabaseball.com/Record/TeamRank/TeamRankDaily.aspx
