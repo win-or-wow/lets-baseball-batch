@@ -11,6 +11,7 @@ import java.time.LocalTime;
 @Getter
 @Builder
 @DynamicUpdate
+@Table(schema="baseball")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class Game {
