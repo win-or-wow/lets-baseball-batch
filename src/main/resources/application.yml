@@ -11,13 +11,13 @@ spring:
   batch:
     job:
       enabled: true
-      name: ${job.name:syncRankingJob}
+      name: ${job.name:NONE}
     jdbc:
       initialize-schema: always
 
 scrap:
   ranking: https://www.koreabaseball.com/Record/TeamRank/TeamRankDaily.aspx
-  play: https://m.sports.naver.com/kbaseball/schedule/index?category=kbo&date=2024-08-01
+  game: https://m.sports.naver.com/kbaseball/schedule/index?category=kbo&date=2024-08-01
   score: https://m.sports.naver.com/kbaseball/schedule/index?date=2024-08-24
 
 # 스크래핑을 위한 web-driver 위치 설정
