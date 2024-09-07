@@ -1,8 +1,6 @@
 package com.korea.baseball_batch.score.service;
 
 import com.korea.baseball_batch.common.entity.Game;
-import com.korea.baseball_batch.common.enums.Status;
-import com.korea.baseball_batch.common.enums.Teams;
 import com.korea.baseball_batch.score.repository.ScoreRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -11,42 +9,35 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import static com.korea.baseball_batch.util.StringUtil.dateFormat;
-import static com.korea.baseball_batch.util.StringUtil.timeFormat;
-
 @Service
 @RequiredArgsConstructor
 public class ScoreService {
 
     private final ScoreRepository scoreRepository;
 
-    public void save(String homeTeam, String awayTeam, String date, String time) {
-        Game game = Game.builder()
-                .homeTeamId(Teams.valueOf(homeTeam).getTeamId())
-                .awayTeamId(Teams.valueOf(awayTeam).getTeamId())
-                .gameDate(dateFormat(date))
-                .gameTime(timeFormat(time))
-                .status(Status.예정.toString())
-                .build();
+    public Optional<Game> findByHomeTeamIdAndGameDate(Long gameId, LocalDate today) {
+        return scoreRepository.findByHomeTeamIdAndGameDate(gameId, today);
+    }
 
-        scoreRepository.save(game);
+    public Optional<Game> findByGameIdAndGameDate(Long gameId, LocalDate today) {
+        return scoreRepository.findByGameIdAndGameDate(gameId, today);
     }
 
     @Transactional
-    public void update(String homeTeam, int homeTeamScore, int awayTeamScore) {
-        // TODO testDate 변경
-        LocalDate testDate = LocalDate.now().minusDays(1);
-//        LocalDate.now();
+    public void update(Game game) {
+        LocalDate updateDate = LocalDate.now().minusDays(1);
 
-        Optional<Game> hasGame = scoreRepository.findByGameDateAndHomeTeamId(testDate, Teams.valueOf(homeTeam).getTeamId());
+        System.out.println(game.getGameId() + " : " + updateDate);
+
+        Optional<Game> hasGame = findByGameIdAndGameDate(game.getGameId(), updateDate);
         Game getGame = hasGame.orElseThrow(() -> new IllegalStateException("해당 게임은 존재하지 않습니다."));
 
-        Game updateGame = Game.builder()
+        Game updateScore = Game.builder()
                 .gameId(getGame.getGameId())
-                .homeTeamScore(homeTeamScore)
-                .awayTeamScore(awayTeamScore)
+                .homeTeamScore(game.getHomeTeamScore())
+                .awayTeamScore(game.getAwayTeamScore())
                 .build();
 
-        getGame.gameScoreUpdate(updateGame);
+        getGame.gameScoreUpdate(updateScore);
     }
 }

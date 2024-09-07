@@ -7,5 +7,6 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 public interface ScoreRepository extends JpaRepository<Game, Long> {
-    Optional<Game> findByGameDateAndHomeTeamId(LocalDate gameDate, Long homeTeamdId);
+    Optional<Game> findByHomeTeamIdAndGameDate(Long homeTeamId, LocalDate gameDate);
+    Optional<Game> findByGameIdAndGameDate(Long gameId, LocalDate gameDate);
 }
