@@ -25,6 +25,9 @@ public class ScoreScrap {
     @Value("${scrap.score}")
     private String scoreUrl;
 
+    @Value("${today}")
+    private LocalDate today;
+
     private final ScrapingConfig scrapingConfig;
     private final ScoreService scoreService;
 
@@ -85,7 +88,7 @@ public class ScoreScrap {
     }
 
     private Game findByHomeTeamIdAndGameDate(String homeTeam) {
-        return scoreService.findByHomeTeamIdAndGameDate(Teams.valueOf(homeTeam).getTeamId(), LocalDate.now().minusDays(1))
+        return scoreService.findByHomeTeamIdAndGameDate(Teams.valueOf(homeTeam).getTeamId(), today)
                 .orElseThrow(() -> new IllegalStateException("게임이 존재하지 않습니다."));
     }
 }
