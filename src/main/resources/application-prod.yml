@@ -4,3 +4,7 @@ spring:
     url: jdbc:postgresql://baseball-instance.cp4ew0qu6gis.ap-northeast-2.rds.amazonaws.com:5432/baseball
     username: lions
     password: 2wogus&rladuddnd
+
+# 스크래핑을 위한 web-driver 위치 설정
+path:
+  web-driver: /opt/chromedriver

@@ -61,7 +61,6 @@ public class GameScrap {
 
     private Game createGame(WebElement row, String date) {
         String time = extractText(row, By.className("MatchBox_time__nIEfd")).split("\n")[1].trim();
-        String stadium = extractText(row, By.className("MatchBox_stadium__13gft")).split("\n")[1].trim();
         List<WebElement> teams = row.findElements(By.className("MatchBoxTeamArea_name_info__2IaZV"));
 
         String awayTeam = teams.get(0).getText();
