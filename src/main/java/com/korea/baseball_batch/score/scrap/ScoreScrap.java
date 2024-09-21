@@ -37,25 +37,28 @@ public class ScoreScrap {
 
         try {
             WebElement ulTag = findFirstElement(driver, By.className("ScheduleAllType_match_list__3n5L_"));
-            List<WebElement> liTags = ulTag.findElements(By.className("MatchBox_item_content__3SGZf"));
 
-            for (WebElement li : liTags) {
-                String gameStatus = extractText(li, By.className("MatchBox_status__2pbzi"));
-                String homeTeam = extractTeamName(li, 1);
+            if(ulTag != null) {
+                List<WebElement> liTags = ulTag.findElements(By.className("MatchBox_item_content__3SGZf"));
 
-                if (isGameFinished(gameStatus)) {
-                    int awayTeamScore = extractTeamScore(li, 0);
-                    int homeTeamScore = extractTeamScore(li, 1);
+                for (WebElement li : liTags) {
+                    String gameStatus = extractText(li, By.className("MatchBox_status__2pbzi"));
+                    String homeTeam = extractTeamName(li, 1);
 
-                    Game getGame = findByHomeTeamIdAndGameDate(homeTeam);
+                    if (isGameFinished(gameStatus)) {
+                        int awayTeamScore = extractTeamScore(li, 0);
+                        int homeTeamScore = extractTeamScore(li, 1);
 
-                    Game game = Game.builder()
-                            .gameId(getGame.getGameId())
-                            .homeTeamScore(homeTeamScore)
-                            .awayTeamScore(awayTeamScore)
-                            .build();
+                        Game getGame = findByHomeTeamIdAndGameDate(homeTeam);
 
-                    gameList.add(game);
+                        Game game = Game.builder()
+                                .gameId(getGame.getGameId())
+                                .homeTeamScore(homeTeamScore)
+                                .awayTeamScore(awayTeamScore)
+                                .build();
+
+                        gameList.add(game);
+                    }
                 }
             }
         } catch (Exception e) {
@@ -68,7 +71,7 @@ public class ScoreScrap {
     }
 
     private WebElement findFirstElement(WebDriver driver, By by) {
-        return driver.findElements(by).get(0);
+        return driver.findElements(by).isEmpty() ? null : driver.findElements(by).get(0);
     }
 
     private String extractText(WebElement element, By by) {
