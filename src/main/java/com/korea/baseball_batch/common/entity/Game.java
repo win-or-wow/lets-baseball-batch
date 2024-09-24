@@ -29,5 +29,6 @@ public class Game {
         this.gameId = game.gameId;
         this.homeTeamScore = game.homeTeamScore;
         this.awayTeamScore = game.awayTeamScore;
+        this.status =game.status;
     }
 }

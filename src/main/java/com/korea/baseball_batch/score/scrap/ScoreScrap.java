@@ -43,19 +43,26 @@ public class ScoreScrap {
 
                 for (WebElement li : liTags) {
                     String gameStatus = extractText(li, By.className("MatchBox_status__2pbzi"));
-                    String homeTeam = extractTeamName(li, 1);
 
-                    if (isGameFinished(gameStatus)) {
+                    String homeTeam = extractTeamName(li, 1);
+                    Game getGame = findByHomeTeamIdAndGameDate(homeTeam);
+
+                    if(isGameCanceled(gameStatus)) {
+                        Game game = Game.builder()
+                                .gameId(getGame.getGameId())
+                                .status(Status.취소.name())
+                                .build();
+
+                        gameList.add(game);
+                    } else {
                         int awayTeamScore = extractTeamScore(li, 0);
                         int homeTeamScore = extractTeamScore(li, 1);
-
-                        Game getGame = findByHomeTeamIdAndGameDate(homeTeam);
 
                         Game game = Game.builder()
                                 .gameId(getGame.getGameId())
                                 .homeTeamScore(homeTeamScore)
                                 .awayTeamScore(awayTeamScore)
-                                .status(Status.종료.name())
+                                .status(getGameStatus(gameStatus).name())
                                 .build();
 
                         gameList.add(game);
@@ -87,8 +94,12 @@ public class ScoreScrap {
         return Integer.parseInt(li.findElements(By.className("MatchBoxTeamArea_score__1_YFB")).get(index).getText());
     }
 
-    private boolean isGameFinished(String gameStatus) {
-        return Status.종료 == Status.valueOf(gameStatus);
+    private boolean isGameCanceled(String gameStatus) {
+        return gameStatus.equals(Status.취소.name());
+    }
+
+    private Status getGameStatus(String gameStatus) {
+        return gameStatus.equals(Status.종료.name()) ? Status.종료 : !gameStatus.equals(Status.종료.name()) && !gameStatus.equals(Status.예정.name()) ? Status.경기중 : Status.valueOf(gameStatus);
     }
 
     private Game findByHomeTeamIdAndGameDate(String homeTeam) {
