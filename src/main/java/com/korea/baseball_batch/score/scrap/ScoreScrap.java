@@ -55,6 +55,7 @@ public class ScoreScrap {
                                 .gameId(getGame.getGameId())
                                 .homeTeamScore(homeTeamScore)
                                 .awayTeamScore(awayTeamScore)
+                                .status(Status.종료.name())
                                 .build();
 
                         gameList.add(game);

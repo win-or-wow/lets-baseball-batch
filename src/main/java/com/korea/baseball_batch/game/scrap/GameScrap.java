@@ -1,6 +1,7 @@
 package com.korea.baseball_batch.game.scrap;
 
 import com.korea.baseball_batch.common.entity.Game;
+import com.korea.baseball_batch.common.enums.Status;
 import com.korea.baseball_batch.common.enums.Teams;
 import com.korea.baseball_batch.config.ScrapingConfig;
 import lombok.RequiredArgsConstructor;
@@ -71,6 +72,7 @@ public class GameScrap {
                 .awayTeamId(getTeamId(awayTeam))
                 .gameDate(dateFormat(date))
                 .gameTime(timeFormat(time))
+                .status(Status.예정.name())
                 .build();
     }
 
