@@ -37,25 +37,36 @@ public class ScoreScrap {
 
         try {
             WebElement ulTag = findFirstElement(driver, By.className("ScheduleAllType_match_list__3n5L_"));
-            List<WebElement> liTags = ulTag.findElements(By.className("MatchBox_item_content__3SGZf"));
 
-            for (WebElement li : liTags) {
-                String gameStatus = extractText(li, By.className("MatchBox_status__2pbzi"));
-                String homeTeam = extractTeamName(li, 1);
+            if(ulTag != null) {
+                List<WebElement> liTags = ulTag.findElements(By.className("MatchBox_item_content__3SGZf"));
 
-                if (isGameFinished(gameStatus)) {
-                    int awayTeamScore = extractTeamScore(li, 0);
-                    int homeTeamScore = extractTeamScore(li, 1);
+                for (WebElement li : liTags) {
+                    String gameStatus = extractText(li, By.className("MatchBox_status__2pbzi"));
 
+                    String homeTeam = extractTeamName(li, 1);
                     Game getGame = findByHomeTeamIdAndGameDate(homeTeam);
 
-                    Game game = Game.builder()
-                            .gameId(getGame.getGameId())
-                            .homeTeamScore(homeTeamScore)
-                            .awayTeamScore(awayTeamScore)
-                            .build();
+                    if(isGameCanceled(gameStatus)) {
+                        Game game = Game.builder()
+                                .gameId(getGame.getGameId())
+                                .status(Status.취소.name())
+                                .build();
 
-                    gameList.add(game);
+                        gameList.add(game);
+                    } else {
+                        int awayTeamScore = extractTeamScore(li, 0);
+                        int homeTeamScore = extractTeamScore(li, 1);
+
+                        Game game = Game.builder()
+                                .gameId(getGame.getGameId())
+                                .homeTeamScore(homeTeamScore)
+                                .awayTeamScore(awayTeamScore)
+                                .status(getGameStatus(gameStatus).name())
+                                .build();
+
+                        gameList.add(game);
+                    }
                 }
             }
         } catch (Exception e) {
@@ -68,7 +79,7 @@ public class ScoreScrap {
     }
 
     private WebElement findFirstElement(WebDriver driver, By by) {
-        return driver.findElements(by).get(0);
+        return driver.findElements(by).isEmpty() ? null : driver.findElements(by).get(0);
     }
 
     private String extractText(WebElement element, By by) {
@@ -83,8 +94,12 @@ public class ScoreScrap {
         return Integer.parseInt(li.findElements(By.className("MatchBoxTeamArea_score__1_YFB")).get(index).getText());
     }
 
-    private boolean isGameFinished(String gameStatus) {
-        return Status.종료 == Status.valueOf(gameStatus);
+    private boolean isGameCanceled(String gameStatus) {
+        return gameStatus.equals(Status.취소.name());
+    }
+
+    private Status getGameStatus(String gameStatus) {
+        return gameStatus.equals(Status.종료.name()) ? Status.종료 : !gameStatus.equals(Status.종료.name()) && !gameStatus.equals(Status.예정.name()) ? Status.경기중 : Status.valueOf(gameStatus);
     }
 
     private Game findByHomeTeamIdAndGameDate(String homeTeam) {

@@ -36,6 +36,7 @@ public class ScoreService {
                 .gameId(getGame.getGameId())
                 .homeTeamScore(game.getHomeTeamScore())
                 .awayTeamScore(game.getAwayTeamScore())
+                .status(game.getStatus())
                 .build();
 
         getGame.gameScoreUpdate(updateScore);
