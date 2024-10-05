@@ -9,6 +9,7 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.core.step.builder.FaultTolerantStepBuilder;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
@@ -17,7 +18,12 @@ import org.springframework.batch.item.support.ListItemReader;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.retry.RetryPolicy;
+import org.springframework.retry.policy.SimpleRetryPolicy;
 import org.springframework.transaction.PlatformTransactionManager;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Configuration
 @RequiredArgsConstructor
@@ -37,13 +43,19 @@ public class RankingBatchConfig {
 
     @Bean
     public Step getRanking(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
-        return new StepBuilder("getRanking", jobRepository)
-            .chunk(10, transactionManager)
-            .allowStartIfComplete(true) // TODO test 필요
-            .reader(rankingReader())
-            .processor(rankingProcessor())
-            .writer(rankingWriter())
-            .build();
+        FaultTolerantStepBuilder<Object, Object> stepBuilder = new StepBuilder("getRanking", jobRepository)
+                .chunk(10, transactionManager)
+                .allowStartIfComplete(true)
+                .reader(rankingReader())
+                .processor(rankingProcessor())
+                .writer(rankingWriter())
+                .faultTolerant()
+                .retry(IllegalStateException.class)
+                .retryLimit(3);
+
+        return stepBuilder
+                .retryPolicy(retryPolicy())
+                .build();
     }
 
     protected ItemReader<Team> rankingReader() {
@@ -56,6 +68,12 @@ public class RankingBatchConfig {
 
     protected ItemWriter<? super Object> rankingWriter() {
         return items -> items.forEach((item) -> rankingService.update((Team) item));
+    }
+
+    private RetryPolicy retryPolicy() {
+        Map<Class<? extends Throwable>, Boolean> retryableExceptions = new HashMap<>();
+        retryableExceptions.put(IllegalStateException.class, true);
+        return new SimpleRetryPolicy(3, retryableExceptions);
     }
 
 }
